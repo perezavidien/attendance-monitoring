@@ -1,0 +1,3 @@
+### POST: /attendance/
+### PUT /attendance/
+### DELETE: /attendance/id

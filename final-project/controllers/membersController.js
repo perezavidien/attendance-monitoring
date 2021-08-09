@@ -1,7 +1,7 @@
 import Datastore from '../dataAccess/members/membersDatastore.js';
-//import Validator from 'validatorjs';
-//import { ErrorHandler } from '../helpers/errorHandler.js'
-//import { isUserExisting, displayResponse } from '../helpers/dataValidators.js'
+import Validator from 'validatorjs';
+import { ErrorHandler } from '../helpers/errorHandler.js'
+import { recordsExists, hasEventAttendance, displayResponse } from '../helpers/validators/membersValidator.js'
 
 export const getAll = async (req, res, next) => {
     try {
@@ -24,6 +24,13 @@ export const getById = async (req, res, next) => {
 
         const data = await dataStore.getById('Id', id);
         //validate
+
+        // Return Member object with array of EventAttendance
+        //    EventAttendance
+        //      EventName
+        //      TimeIn
+        //      TimeOut
+
         displayResponse(res, data);
 
         next()
@@ -43,7 +50,11 @@ export const search = async (req, res, next) => {
 
 
         const data = await dataStore.getByNameAndStatus(name, status);
-        //validate?
+        //validate
+        // Status are enumerations of
+        // 	Active
+        // 	In-active
+
         displayResponse(res, data);
 
         next()
@@ -62,6 +73,7 @@ export const create = async (req, res, next) => {
         //     .getById(id);
 
         //validate
+        //o	Required fields validation check
 
         await dataStore
             .insertMember(req.body);
@@ -84,6 +96,7 @@ export const update = async (req, res, next) => {
         //     .getById(id);
 
         //validate
+        //o	Required fields validation check
 
         await dataStore
             .updateMember(dataname, req.body);
@@ -106,6 +119,7 @@ export const deleteById = async (req, res, next) => {
             .getById(id);
 
         //validate
+        //o	Return a validation error if there is an event attendance
 
         await dataStore
             .deleteMember(id);

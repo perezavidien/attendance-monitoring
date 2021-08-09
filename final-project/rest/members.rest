@@ -1,0 +1,6 @@
+### GET: /members/
+### GET: /members/Id
+### GET: /members/search?name=&status=
+### POST: / members/
+### PUT / members /
+### DELETE: /members/id

@@ -1,7 +1,7 @@
 import Datastore from '../dataAccess/events/eventsDatastore';
-//import Validator from 'validatorjs';
-//import { ErrorHandler } from '../helpers/errorHandler.js'
-//import { isUserExisting, displayResponse } from '../helpers/dataValidators.js'
+import Validator from 'validatorjs';
+import { ErrorHandler } from '../helpers/errorHandler.js'
+import { recordsExists, hasMemberAttendance, displayResponse } from '../helpers/validators/eventsValidator'
 
 export const getAll = async (req, res, next) => {
     try {
@@ -24,6 +24,13 @@ export const getById = async (req, res, next) => {
 
         const data = await dataStore.getById('id', id);
         //validate
+        //Return Event object with array of MemberAttendance
+        //  MemberAttendance:
+        //     MemberId (GUID)
+        //     Name
+        //     TimeIn
+        //     TimeOut
+
         displayResponse(res, data);
 
         next()
@@ -44,6 +51,11 @@ export const search = async (req, res, next) => {
 
         const data = await dataStore.getByNameAndDates(name, status);
         //validate?
+
+        // Search events by Event Name, DateTime Start, DateTime End
+        // Date Format: yyyy_mm_dd 
+        // Will return an error if no search criteria provided
+
         displayResponse(res, data);
 
         next()
@@ -62,6 +74,9 @@ export const create = async (req, res, next) => {
         //     .getById(id);
 
         //validate
+        // Accept Event object
+        // Event start date should be < event end date
+        // Required fields validation check
 
         await dataStore
             .insertEvent(req.body);
@@ -84,6 +99,10 @@ export const update = async (req, res, next) => {
         //     .getById(id);
 
         //validate
+        // Accept Event object
+        // Event start date should be < event end date
+        // Required fields validation check
+
 
         await dataStore
             .updateEvent(dataname, req.body);
@@ -106,6 +125,7 @@ export const deleteById = async (req, res, next) => {
             .getById(id);
 
         //validate
+        //Return a validation error if there is a member attendance
 
         await dataStore
             .deleteEvent(id);
@@ -128,6 +148,13 @@ export const exportById = async (req, res, next) => {
         // validate
         // displayResponse(res, data);
         // return excel file
+        //Filename: [EventName]_[EventStartDateTime].xlsx
+        //Columns:
+        // •	Member Name
+        // •	Time-In
+        // •	Time-Out
+        // Sort results by Time-In, Asc
+
         next()
     }
     catch (err) {

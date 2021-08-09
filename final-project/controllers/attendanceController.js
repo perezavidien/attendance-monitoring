@@ -1,7 +1,7 @@
 import Datastore from '../dataAccess/attendance/attendanceDatastore.js';
-//import Validator from 'validatorjs';
-//import { ErrorHandler } from '../helpers/errorHandler.js'
-//import { isUserExisting, displayResponse } from '../helpers/dataValidators.js'
+import Validator from 'validatorjs';
+import { ErrorHandler } from '../helpers/errorHandler.js'
+import { recordsExists, displayResponse } from '../helpers/validators/attendanceValidator.js'
 
 export const getAll = async (req, res, next) => {
     try {
@@ -42,6 +42,8 @@ export const create = async (req, res, next) => {
         //     .getById(id);
 
         //validate
+        // Time-in date should be < Time-out date
+        // Required fields validation check
 
         await dataStore
             .insertAttendance(req.body);
@@ -64,6 +66,8 @@ export const update = async (req, res, next) => {
         //     .getById(id);
 
         //validate
+        // Time-in date should be < Time-out date
+        // Required fields validation check
 
         await dataStore
             .updateAttendance(dataname, req.body);
@@ -84,6 +88,8 @@ export const deleteById = async (req, res, next) => {
 
         await dataStore
             .deleteAttendance(id);
+
+        // delete eventattendance? and memberattendance?
 
         res.sendStatus(200);
 

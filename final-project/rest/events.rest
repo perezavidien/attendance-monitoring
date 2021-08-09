@@ -1,0 +1,6 @@
+### GET: /events/
+### GET: /events/Id
+### POST: /events/ and PUT /events/
+### DELETE: /events/id
+### GET: /events/search?eventname=[searchEventName]&datestart=[searchDateStart]&dataend=[searchDateEnd]
+### GET: /events/export?eventId
