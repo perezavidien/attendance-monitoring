@@ -49,7 +49,7 @@ export default class Datastore {
 
         dbContext
             .get(this.tableName)
-            .find({ 'id': attendance.Id })
+            .find({ 'id': attendance.id })
             .assign(attendance).write();
     }
 

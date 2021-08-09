@@ -9,13 +9,10 @@ export const displayResponse = (res, data) => {
         throw new ErrorHandler(404)
     }
 
-    if (hasMemberAttendance) {
-        throw new ErrorHandler(400);
-    }
-
     res.send(data);
 }
 
 export const hasMemberAttendance = (res, data) => {
     // todo 
+    return false;
 }

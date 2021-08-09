@@ -9,13 +9,10 @@ export const displayResponse = (res, data) => {
         throw new ErrorHandler(404)
     }
 
-    if (hasEventAttendance) {
-        throw new ErrorHandler(400);
-    }
-
     res.send(data);
 }
 
 export const hasEventAttendance = (res, data) => {
     // todo 
+    return false;
 }
