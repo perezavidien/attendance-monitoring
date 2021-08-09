@@ -3,18 +3,18 @@ import * as eventsController from '../controllers/eventsController.js';
 
 const eventRouter = express.Router();
 //•	GET: /events/
-router.get('/events/', eventsController.getAll);
+router.get('/', eventsController.getAll);
 //•	GET: /events/id
-router.get('events/:id', eventsController.getById);
+router.get('/:id', eventsController.getById);
 //•	GET: /events/search?eventname=[searchEventName]&datestart=[searchDateStart]&dataend=[searchDateEnd]
-router.get('/events/search', eventsController.search); //check docu
+router.get('/search', eventsController.search); //check docu
 //•	GET: /events/export?eventId
-router.get('/events/export', eventsController.exportById);
+router.get('/export', eventsController.exportById);
 //•	POST: / events /
-router.post('/events/', eventsController.create);
+router.post('/', eventsController.create);
 // PUT / events /
-router.put('/events/', eventsController.update);
+router.put('/', eventsController.update);
 //•	DELETE: /events/id
-router.delete('/events/:id', eventsController.deleteById);
+router.delete('/:id', eventsController.deleteById);
 
 export default eventRouter;

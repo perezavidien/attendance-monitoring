@@ -13,6 +13,6 @@ router.post('/', membersController.create);
 // PUT / members /
 router.put('/', membersController.update);
 //•	DELETE: /members/Id
-router.delete('/member/:id', membersController.deleteById);
+router.delete('/:id', membersController.deleteById);
 
 export default memberRouter;
