@@ -6,14 +6,15 @@
       "type": "",
       "startDate": "",
       "endDate": "",
-      "attendanceList": []
+      "memberAttendance": []
     },
     {
       "id": "b6a6f6de-a07b-448d-94a1-70dd26a192e5",
       "name": "First event",
       "type": "",
       "startDate": "",
-      "endDate": ""
+      "endDate": "",
+      "memberAttendance": []
     }
   ]
 }

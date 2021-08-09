@@ -1,16 +1,18 @@
 {
-    "members": [
-      {
-        "id": "a71c8333-e51b-456c-aa89-7ac409002dfc",
-        "name": "Simon Pedro",
-        "joinedDate": "",
-        "status": ""
-      },
-      {
-        "id": "49b00c00-6317-427e-91cf-c8291c97ecd7",
-        "name": "Abi bibibi",
-        "joinedDate": "",
-        "status": ""
-      }
-    ]
-  }
+  "members": [
+    {
+      "id": "a71c8333-e51b-456c-aa89-7ac409002dfc",
+      "name": "Simon Pedro",
+      "joinedDate": "",
+      "status": "",
+      "eventAttendance": []
+    },
+    {
+      "id": "49b00c00-6317-427e-91cf-c8291c97ecd7",
+      "name": "Abi bibibi",
+      "joinedDate": "",
+      "status": "",
+      "eventAttendance": []
+    }
+  ]
+}
