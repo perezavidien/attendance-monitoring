@@ -33,6 +33,26 @@ export const getById = async (req, res, next) => {
     }
 }
 
+
+export const search = async (req, res, next) => {
+    try {
+        const dataStore = new Datastore();
+        const { name, status } = req.params;
+        console.log(req.params);
+        debugger;
+
+
+        const data = await dataStore.getByNameAndDates(name, status);
+        //validate?
+        displayResponse(res, data);
+
+        next()
+    }
+    catch (err) {
+        next(err)
+    }
+}
+
 export const create = async (req, res, next) => {
     try {
         const dataStore = new Datastore();
