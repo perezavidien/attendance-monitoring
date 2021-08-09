@@ -1,4 +1,4 @@
-import Datastore from '../dataAccess/attendance/attendanceDatastore.js';
+import Datastore from '../dataAccess/members/membersDatastore.js';
 //import Validator from 'validatorjs';
 //import { ErrorHandler } from '../helpers/errorHandler.js'
 //import { isUserExisting, displayResponse } from '../helpers/dataValidators.js'
@@ -22,8 +22,28 @@ export const getById = async (req, res, next) => {
         const dataStore = new Datastore()
         const { id } = req.params;
 
-        const data = await dataStore.getById('id', id);
+        const data = await dataStore.getById('Id', id);
         //validate
+        displayResponse(res, data);
+
+        next()
+    }
+    catch (err) {
+        next(err)
+    }
+}
+
+
+export const search = async (req, res, next) => {
+    try {
+        const dataStore = new Datastore();
+        const { name, status } = req.params;
+        console.log(req.params);
+        debugger;
+
+
+        const data = await dataStore.getByNameAndStatus(name, status);
+        //validate?
         displayResponse(res, data);
 
         next()
@@ -44,7 +64,7 @@ export const create = async (req, res, next) => {
         //validate
 
         await dataStore
-            .insertAttendance(req.body);
+            .insertMember(req.body);
 
         res.sendStatus(201);
 
@@ -66,7 +86,7 @@ export const update = async (req, res, next) => {
         //validate
 
         await dataStore
-            .updateAttendance(dataname, req.body);
+            .updateMember(dataname, req.body);
 
         res.sendStatus(200);
 
@@ -82,8 +102,13 @@ export const deleteById = async (req, res, next) => {
         const dataStore = new Datastore();
         const { id } = req.params;
 
+        const data = await dataStore
+            .getById(id);
+
+        //validate
+
         await dataStore
-            .deleteAttendance(id);
+            .deleteMember(id);
 
         res.sendStatus(200);
 

@@ -1,0 +1,19 @@
+{
+  "events": [
+    {
+      "id": "fdda538a-e952-4d0c-93d4-5bf9d7542a95",
+      "name": "Team building",
+      "type": "",
+      "startDate": "",
+      "endDate": "",
+      "attendanceList": []
+    },
+    {
+      "id": "b6a6f6de-a07b-448d-94a1-70dd26a192e5",
+      "name": "First event",
+      "type": "",
+      "startDate": "",
+      "endDate": ""
+    }
+  ]
+}
