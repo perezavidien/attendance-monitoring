@@ -2,6 +2,7 @@ import express from 'express';
 import eventsRouter from './routers/eventsRouter.js';
 import attendanceRouter from './routers/attendanceRouter.js';
 import membersRouter from './routers/membersRouter.js';
+import { handleError } from './helpers/errorHandler.js'
 
 const app = express();
 

@@ -3,14 +3,14 @@ import * as attendanceController from '../controllers/attendanceController.js';
 
 const attendanceRouter = express.Router();
 
-router.get('/', attendanceController.getAll);
+attendanceRouter.get('/', attendanceController.getAll);
 
-router.get('/:id', attendanceController.getById);
+attendanceRouter.get('/:id', attendanceController.getById);
 //•	POST: /attendance/ 
-router.post('/', attendanceController.create);
+attendanceRouter.post('/', attendanceController.create);
 // PUT /attendance/
-router.put('/', attendanceController.update);
+attendanceRouter.put('/', attendanceController.update);
 //•	DELETE: /attendance/id
-router.delete('/attendance/:id', attendanceController.deleteById);
+attendanceRouter.delete('/attendance/:id', attendanceController.deleteById);
 
 export default attendanceRouter;

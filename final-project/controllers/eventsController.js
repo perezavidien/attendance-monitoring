@@ -1,7 +1,7 @@
-import Datastore from '../dataAccess/events/eventsDatastore';
+import Datastore from '../dataAccess/events/eventsDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
-import { recordExists, hasMemberAttendance, displayResponse } from '../helpers/validators/eventsValidator'
+import { recordExists, hasMemberAttendance, displayResponse } from '../helpers/validators/eventsValidator.js'
 
 export const getAll = async (req, res, next) => {
     try {
@@ -20,6 +20,7 @@ export const getAll = async (req, res, next) => {
 export const getById = async (req, res, next) => {
     try {
         const dataStore = new Datastore()
+        console.log(re.params);
         const { id } = req.params;
 
         const data = await dataStore.getById(id);

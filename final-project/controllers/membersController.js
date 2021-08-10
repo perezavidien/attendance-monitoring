@@ -1,10 +1,11 @@
 import Datastore from '../dataAccess/members/membersDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
-import { displayResponse, hasEventAttendance, recordsExists } from '../helpers/validators/membersValidator.js'
+import { displayResponse, hasEventAttendance, recordExists } from '../helpers/validators/membersValidator.js'
 
 export const getAll = async (req, res, next) => {
     try {
+        console.log('getAll');
         const dataStore = new Datastore()
         const data = await dataStore.getAll();
 
@@ -19,20 +20,25 @@ export const getAll = async (req, res, next) => {
 
 export const getById = async (req, res, next) => {
     try {
-        const dataStore = new Datastore()
+        console.log('getbyid');
         const { id } = req.params;
 
-        const data = await dataStore.getById('id', id);
+        if (id === 'search') {
+            search(req, res, next);
+        } else {
+            const dataStore = new Datastore()
+            const data = await dataStore.getById(id);
 
-        // Return Member object with array of EventAttendance
-        //    EventAttendance
-        //      EventName
-        //      TimeIn
-        //      TimeOut
+            // Return Member object with array of EventAttendance
+            //    EventAttendance
+            //      EventName
+            //      TimeIn
+            //      TimeOut
 
-        displayResponse(res, data);
+            displayResponse(res, data);
 
-        next()
+            next()
+        }
     }
     catch (err) {
         next(err)
@@ -42,13 +48,11 @@ export const getById = async (req, res, next) => {
 // GET: /members/search?name=&status=
 export const search = async (req, res, next) => {
     try {
+        console.log('search');
         const dataStore = new Datastore();
 
         const name = req.query?.name;
         const status = req.query?.status;
-
-        console.log(req.params);
-        debugger;
 
         const data = await dataStore.getByNameAndStatus(name, status);
 
@@ -68,24 +72,27 @@ export const search = async (req, res, next) => {
 
 export const create = async (req, res, next) => {
     try {
+        console.log('create');
         const dataStore = new Datastore();
         const { id } = req.body;
-
-        const data = await dataStore.getById(id);
 
         //validate
         const validationRules = {
             id: 'required',
             name: 'required|string',
             joinedDate: 'date',
-            status: 'required'
+            status: 'required|string'
         };
+
         // Required fields validation check
         // Status should be Active / Inactive
 
         const validation = new Validator(req.body, validationRules);
 
-        if (recordExists(data.id)) {
+        //try to get if the data already exists
+        const data = await dataStore.getById(id);
+
+        if (data) {
             throw new ErrorHandler(409);
         }
         else if (validation.fails()) {
@@ -106,24 +113,24 @@ export const create = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try {
+        console.log('update');
         const dataStore = new Datastore();
-        const { id } = req.params;
-
-        const data = await dataStore.getById(id);
+        const { id } = req.body;
 
         //validate
         const validationRules = {
             id: 'required',
             name: 'required|string',
             joinedDate: 'date',
-            status: 'required'
+            status: 'required|string'
         };
         // Required fields validation check
         // Status should be Active / Inactive
 
         const validation = new Validator(req.body, validationRules);
+        const data = await dataStore.getById(id);
 
-        if (!recordExists(data)) {
+        if (!data) {
             throw new ErrorHandler(404);
         }
         else if (validation.fails()) {
@@ -131,7 +138,7 @@ export const update = async (req, res, next) => {
         }
 
         await dataStore
-            .updateMember(dataname, req.body);
+            .updateMember(req.body);
 
         res.sendStatus(200);
 
@@ -144,15 +151,16 @@ export const update = async (req, res, next) => {
 
 export const deleteById = async (req, res, next) => {
     try {
+        console.log('delete');
         const dataStore = new Datastore();
         const { id } = req.params;
 
         const data = await dataStore.getById(id);
 
-        if (!recordExists(data)) {
+        if (!data) {
             throw new ErrorHandler(404);
         } else if (hasEventAttendance(data)) {
-            throw new ErrorHandler(400);
+            throw new ErrorHandler(400); //to test
         }
 
         //validate

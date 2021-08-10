@@ -19,7 +19,6 @@ export default class Datastore {
 
     getAll = async () => {
         const dbContext = await this.dbContext;
-
         return dbContext
             .get(this.tableName)
             .value();
@@ -27,16 +26,14 @@ export default class Datastore {
 
     getById = async (id) => {
         const dbContext = await this.dbContext;
-
         return dbContext
             .get(this.tableName)
             .find({ 'id': id })
-            .value() || [];
+            .value();
     }
 
     getByNameAndStatus = async (name, status) => {
         const dbContext = await this.dbContext;
-
         return dbContext
             .get(this.tableName)
             .find({ 'name': name, 'status': status })
@@ -46,7 +43,6 @@ export default class Datastore {
     insertMember = async (member) => {
         const dbContext = await this.dbContext;
         const id = uuid();
-
         dbContext
             .get(this.tableName)
             .push({ id, ...member })
@@ -55,18 +51,16 @@ export default class Datastore {
 
     updateMember = async (member) => {
         const dbContext = await this.dbContext;
-
         dbContext
             .get(this.tableName)
-            .find({ 'Id': member.Id })
+            .find({ 'id': member.id })
             .assign(member).write();
     }
 
     deleteMember = async (id) => {
         const dbContext = await this.dbContext;
-
         dbContext
             .get(this.tableName)
-            .remove({ 'Id': id }).write();
+            .remove({ 'id': id }).write();
     }
 }

@@ -3,16 +3,14 @@ import * as membersController from '../controllers/membersController.js';
 
 const memberRouter = express.Router();
 //•	GET: /members/
-router.get('/', membersController.getAll);
-//•	GET: /members/Id
-router.get('/:id', membersController.getById);
-//•	GET: /members/search?name=&status=
-router.get('/search', membersController.search); //check docu
+memberRouter.get('/', membersController.getAll);
 //•	POST: / members /
-router.post('/', membersController.create);
+memberRouter.post('/', membersController.create);
 // PUT / members /
-router.put('/', membersController.update);
+memberRouter.put('/', membersController.update);
+//•	GET: /members/Id
+memberRouter.get('/:id', membersController.getById);
 //•	DELETE: /members/Id
-router.delete('/:id', membersController.deleteById);
+memberRouter.delete('/:id', membersController.deleteById);
 
 export default memberRouter;

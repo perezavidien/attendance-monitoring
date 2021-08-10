@@ -1,6 +1,28 @@
-### GET: /events/
-### GET: /events/Id
-### POST: /events/ and PUT /events/
-### DELETE: /events/id
-### GET: /events/search?eventname=[searchEventName]&datestart=[searchDateStart]&dataend=[searchDateEnd]
-### GET: /events/export?eventId
+### GET: http://localhost:3000/events/
+
+### GET: http://localhost:3000/events/fdda538a-e952-4d0c-93d4-5bf9d7542a95
+
+### POST: http://localhost:3000/events/
+{
+    "id": "7ec71de5-34c2-4c11-ba07-b4cd860f2c4e",
+    "name": "first",
+    "type": "Active",
+    "startTime": "2021-01-01",
+    "endTime": "2022-02-02",
+    "memberAttendance": []
+}
+### PUT: http://localhost:3000/events/
+{
+    "id": "7ec71de5-34c2-4c11-ba07-b4cd860f2c4e",
+    "name": "new event updated",
+    "type": "Inactive",
+    "startTime": "2022-02-02",
+    "endTime": "2023-03-03",
+    "memberAttendance": []
+}
+
+### DELETE: http://localhost:3000/events/7ec71de5-34c2-4c11-ba07-b4cd860f2c4e
+
+### GET: http://localhost:3000/events/search?name=first&datestart=2021-01-01&dateend=2022-02-02
+
+### GET: http://localhost:3000/events/export?fdda538a-e952-4d0c-93d4-5bf9d7542a95

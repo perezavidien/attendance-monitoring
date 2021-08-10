@@ -2,16 +2,16 @@
   "members": [
     {
       "id": "a71c8333-e51b-456c-aa89-7ac409002dfc",
-      "name": "Simon Pedro",
+      "name": "first",
       "joinedDate": "",
-      "status": "",
+      "status": "active",
       "eventAttendance": []
     },
     {
-      "id": "49b00c00-6317-427e-91cf-c8291c97ecd7",
-      "name": "Abi bibibi",
+      "id": "19383280-92d0-4de0-a85a-183fbecf4ebf",
+      "name": "second",
       "joinedDate": "",
-      "status": "",
+      "status": "inactive",
       "eventAttendance": []
     }
   ]
