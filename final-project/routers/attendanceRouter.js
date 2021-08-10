@@ -11,6 +11,6 @@ attendanceRouter.post('/', attendanceController.create);
 // PUT /attendance/
 attendanceRouter.put('/', attendanceController.update);
 //•	DELETE: /attendance/id
-attendanceRouter.delete('/attendance/:id', attendanceController.deleteById);
+attendanceRouter.delete('/:id', attendanceController.deleteById);
 
 export default attendanceRouter;

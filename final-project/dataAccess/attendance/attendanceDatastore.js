@@ -31,7 +31,7 @@ export default class Datastore {
         return dbContext
             .get(this.tableName)
             .find({ 'id': id })
-            .value() || [];
+            .value();
     }
 
     insertAttendance = async (attendance) => {

@@ -5,6 +5,7 @@ import { recordExists, displayResponse } from '../helpers/validators/attendanceV
 
 export const getAll = async (req, res, next) => {
     try {
+        console.log('getall');
         const dataStore = new Datastore()
         const data = await dataStore.getAll();
 
@@ -19,6 +20,7 @@ export const getAll = async (req, res, next) => {
 
 export const getById = async (req, res, next) => {
     try {
+        console.log('getbyid');
         const dataStore = new Datastore()
         const { id } = req.params;
 
@@ -35,24 +37,25 @@ export const getById = async (req, res, next) => {
 
 export const create = async (req, res, next) => {
     try {
+        console.log('create');
         const dataStore = new Datastore();
         const { id, timeIn, timeOut } = req.body;
 
-        const data = await dataStore.getById(id);
+        const exists = await dataStore.getById(id);
 
 
         //validate
         const validationRules = {
             id: 'required',
-            timeIn: ['required', 'date', 'before:timeOut'],
-            timeOut: ['date', 'after:timeIn']
+            timeIn: ['required', 'date'], //, 'before:timeOut'], //todo: this validator makes them both required
+            timeOut: ['date'] //, 'after:timeIn']
         };
         // Time-in date should be < Time-out date
         // Required fields validation check
 
         const validation = new Validator(req.body, validationRules);
 
-        if (recordExists(data.id)) {
+        if (exists) {
             throw new ErrorHandler(409);
         }
         else if (validation.fails()) {
@@ -73,22 +76,23 @@ export const create = async (req, res, next) => {
 
 export const update = async (req, res, next) => {
     try {
+        console.log('update');
         const dataStore = new Datastore();
         const { id, timeIn, timeOut } = req.body;
 
-        const data = await dataStore.getById(id);
+        const exists = await dataStore.getById(id);
 
 
         //validate
         const validationRules = {
-            id: 'required',
-            timeIn: ['required', 'date', 'before:timeOut'],
-            timeOut: ['date', 'after:timeIn']
+            id: 'required', //todo uuid
+            timeIn: ['required', 'date'], //, 'before:timeOut'],
+            timeOut: ['date'] //, 'after:timeIn']
         };
 
         const validation = new Validator(req.body, validationRules);
 
-        if (!recordExists(data)) {
+        if (!exists) {
             throw new ErrorHandler(404);
         }
         else if (validation.fails()) {
@@ -111,12 +115,13 @@ export const update = async (req, res, next) => {
 
 export const deleteById = async (req, res, next) => {
     try {
+        console.log('delete');
         const dataStore = new Datastore();
         const { id } = req.params;
 
-        const data = await dataStore.getById(id);
+        const exists = await dataStore.getById(id);
 
-        if (!recordExists(data)) {
+        if (!exists) {
             throw new ErrorHandler(404);
         }
 
