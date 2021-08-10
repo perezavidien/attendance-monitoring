@@ -34,10 +34,13 @@ export default class Datastore {
 
     getByNameAndStatus = async (name, status) => {
         const dbContext = await this.dbContext;
+
+        //todo
+        // this search is case sensitive and the datets are treated as strings
         return dbContext
             .get(this.tableName)
             .find({ 'name': name, 'status': status })
-            .value() || [];
+            .value();
     }
 
     insertMember = async (member) => {

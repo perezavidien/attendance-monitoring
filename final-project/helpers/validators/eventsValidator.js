@@ -5,7 +5,7 @@ export const recordExists = (data) => {
 }
 
 export const displayResponse = (res, data) => {
-    if (!recordsExists(data)) {
+    if (!recordExists(data)) {
         throw new ErrorHandler(404)
     }
 

@@ -31,16 +31,18 @@ export default class Datastore {
         return dbContext
             .get(this.tableName)
             .find({ 'id': id })
-            .value() || [];
+            .value();
     }
 
     getByNameAndDates = async (name, startDate, endDate) => {
         const dbContext = await this.dbContext;
 
+        //todo
+        // this search is case sensitive and the datets are treated as strings
         return dbContext
             .get(this.tableName)
             .find({ 'name': name, 'startDate': startDate, 'endDate': endDate })
-            .value() || [];
+            .value();
     }
 
     insertEvent = async (event) => {
