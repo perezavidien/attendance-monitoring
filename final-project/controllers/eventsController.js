@@ -2,6 +2,7 @@ import Datastore from '../dataAccess/events/eventsDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
 import { recordExists, hasMemberAttendance, displayResponse } from '../helpers/validators/eventsValidator.js'
+import { downloadCsv } from '../helpers/downloadCsv.js';
 
 export const getAll = async (req, res, next) => {
     try {
@@ -160,7 +161,7 @@ export const deleteById = async (req, res, next) => {
         const { id } = req.params;
 
         const exists = await dataStore.getById(id);
-        
+
         //validate
         if (!exists) {
             throw new ErrorHandler(404);
@@ -185,10 +186,13 @@ export const deleteById = async (req, res, next) => {
 export const exportById = async (req, res, next) => {
     try {
         console.log('exportbyid');
+        const eventId = req._parsedUrl.query;
         const dataStore = new Datastore();
-        const exists = await dataStore.getById(req.query?.eventId);
+        const data = await dataStore.getById(eventId);
 
         // validate
+        if (!data)
+            throw new ErrorHandler(404);
 
         //todo
         // displayResponse(res, data);
@@ -199,13 +203,32 @@ export const exportById = async (req, res, next) => {
         // •	Time-In
         // •	Time-Out
         // Sort results by Time-In, Asc
+        const mapping = [
+            {
+                label: 'Event Id',
+                value: 'id'
+            }, {
+                label: 'Event Name',
+                value: 'name'
+            }, {
+                label: 'Event Type',
+                value: 'type'
+            }, {
+                label: 'Start Date',
+                value: 'startDate'
+            }, {
+                label: 'End Date',
+                value: 'endDate'
+            }, {
+                label: 'Member Attendance',
+                value: 'memberAttendance'
+            }
+        ];
 
-        //validate
-        if (!exists) {
-            throw new ErrorHandler(404);
-        }
+        console.log(mapping);
+        const fileName = data.name + '_' + data.startTime + '.csv';
+        downloadCsv(res, fileName, mapping, data);
 
-        //res.sendFile();
         next()
     }
     catch (err) {
