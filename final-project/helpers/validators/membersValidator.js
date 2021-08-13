@@ -12,7 +12,8 @@ export const displayResponse = (res, data) => {
     res.send(data);
 }
 
-export const hasEventAttendance = (res, data) => {
-    // todo 
+export const hasEventAttendance = (data) => {
+    if (data.eventAttendance && data.eventAttendance.length > 0)
+        return true;
     return false;
 }

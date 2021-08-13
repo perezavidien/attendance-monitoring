@@ -12,7 +12,14 @@
       "name": "second",
       "joinedDate": "",
       "status": "inactive",
-      "eventAttendance": []
+      "eventAttendance": [
+        {
+          "something": 123
+        },
+        {
+          "something": 233
+        }
+      ]
     }
   ]
 }

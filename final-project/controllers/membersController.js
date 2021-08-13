@@ -160,11 +160,12 @@ export const deleteById = async (req, res, next) => {
         if (!data) {
             throw new ErrorHandler(404);
         } else if (hasEventAttendance(data)) {
-            throw new ErrorHandler(400); //to test
+            throw new ErrorHandler(400);
         }
 
         //validate
-        //o	Return a validation error if there is an event attendance
+        //TODO
+        //Return a validation error if there is an event attendance
 
         await dataStore
             .deleteMember(id);
