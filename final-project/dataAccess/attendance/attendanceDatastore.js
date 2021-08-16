@@ -25,12 +25,12 @@ export default class AttendanceDatastore {
             .value();
     }
 
-    getById = async (id) => {
+    getById = async (attendanceId) => {
         const dbContext = await this.dbContext;
 
         return dbContext
             .get(this.tableName)
-            .find({ 'attendanceId': id })
+            .find({ 'attendanceId': attendanceId })
             .value();
     }
 

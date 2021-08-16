@@ -1,4 +1,6 @@
 import MemberDatastore from '../dataAccess/members/membersDatastore.js';
+import AttendanceDatastore from '../dataAccess/attendance/attendanceDatastore.js';
+import EventDatastore from '../dataAccess/events/eventsDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
 import { hasEventAttendance } from '../helpers/validators/membersValidator.js'
@@ -26,20 +28,44 @@ export const getById = async (req, res, next) => {
         if (id === 'search') {
             return search(req, res, next);
         }
-        const dataStore = new MemberDatastore()
-        const data = await dataStore.getById(id);
+        const memberDataStore = new MemberDatastore();
+        const memberData = await memberDataStore.getById(id);
 
-        // Return Member object with array of EventAttendance
-        //    EventAttendance
-        //      EventName
-        //      TimeIn
-        //      TimeOut
-
-        if (!data) {
+        if (!memberData) {
             throw new ErrorHandler(404);
         }
 
-        res.send(data);
+        //if has attendance
+        const eventAttendanceArr = [];
+        console.log(memberData.attendanceId);
+
+        if (memberData.attendanceId) {
+            const attendanceDatastore = new AttendanceDatastore();
+            // todo hindi sya array :(
+            const attendanceData = await attendanceDatastore.getById(memberData.attendanceId);
+
+            console.log(attendanceData);
+            //attendanceData.forEach(a => {
+
+            if (attendanceData) {
+                const eventDatastore = new EventDatastore();
+                const eventData = await eventDatastore.getById(attendanceData.eventId);
+
+
+                const { timeIn, timeOut } = attendanceData;
+                const eventName = eventData?.eventName;
+
+                eventAttendanceArr.push({
+                    "eventName": eventName,
+                    "timeIn": timeIn,
+                    "timeOut": timeOut,
+                });
+            }
+            //});
+        }
+
+        memberData.eventAttendance = eventAttendanceArr;
+        res.send(memberData);
 
         next()
     }
