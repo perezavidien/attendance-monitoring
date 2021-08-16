@@ -242,6 +242,7 @@ export const exportById = async (req, res, next) => {
         const eventDataStore = new EventDatastore();
         const eventData = await eventDataStore.getById(eventId);
 
+        console.log(eventData);
         // validate
         if (!eventData)
             throw new ErrorHandler(404);
@@ -249,25 +250,33 @@ export const exportById = async (req, res, next) => {
         const attendanceDataStore = new AttendanceDatastore();
         const attendanceData = await attendanceDataStore.getByEventId(eventId);
 
-        let membersList;
+        console.log(attendanceData);
+
+        let membersList = [];
 
         if (attendanceData) {
             const memberDataStore = new MemberDatastore();
 
-            attendanceData.forEach(_a => {
-                const memberData = memberDataStore.getByAttendanceId(_a.attendanceId);
+            //attendanceData.forEach(_a => {
+            // todo not array pa
+            const memberData = await memberDataStore.getByAttendanceId(attendanceData.attendanceId);
 
-                const { timeIn, timeOut } = _a;
+            console.log(memberData);
+            const { timeIn, timeOut } = attendanceData;
 
-                memberData.forEach(_m => {
-                    membersList.push({
-                        "name": _m.memberName,
-                        "timeIn": timeIn,
-                        "timeOut": timeOut
-                    });
+            if (memberData) {
+                // todo not array pa
+                //memberData.forEach(_m => {
+                membersList.push({
+                    "name": memberData.memberName,
+                    "timeIn": timeIn,
+                    "timeOut": timeOut
                 });
-            });
+                //});
+            }
+            //});
 
+            console.log(membersList);
             //todo test 
             const mapping = [
                 {
@@ -282,9 +291,8 @@ export const exportById = async (req, res, next) => {
                 }
             ];
 
-            console.log(mapping);
-            const fileName = eventData.name + '_' + eventData.startTime + '.xlsx';
-            // Sort results by Time-In, Asc
+            const fileName = eventData.eventName + '_' + eventData.startDateTime + '.csv';
+            // todo Sort results by Time-In, Asc
             downloadCsv(res, fileName, mapping, membersList);
 
             next()
