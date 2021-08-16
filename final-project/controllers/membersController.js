@@ -81,12 +81,12 @@ export const create = async (req, res, next) => {
     try {
         console.log('create');
         const dataStore = new MemberDatastore();
-        const { id } = req.body;
+        const { memberId } = req.body;
 
         //validate
         const validationRules = {
-            id: 'required',
-            name: 'required|string',
+            // memberId: 'required', // creating should accept no Id?
+            memberName: 'required|string',
             joinedDate: 'date',
             status: 'required|string'
         };
@@ -97,7 +97,7 @@ export const create = async (req, res, next) => {
         const validation = new Validator(req.body, validationRules);
 
         //try to get if the data already exists
-        const data = await dataStore.getById(id);
+        const data = await dataStore.getById(memberId);
 
         if (data) {
             throw new ErrorHandler(409);
@@ -122,12 +122,12 @@ export const update = async (req, res, next) => {
     try {
         console.log('update');
         const dataStore = new MemberDatastore();
-        const { id } = req.body;
+        const { memberId } = req.body;
 
         //validate
         const validationRules = {
-            id: 'required',
-            name: 'required|string',
+            memberId: 'required',
+            memberName: 'required|string',
             joinedDate: 'date',
             status: 'required|string'
         };
@@ -135,7 +135,7 @@ export const update = async (req, res, next) => {
         // Status should be Active / Inactive
 
         const validation = new Validator(req.body, validationRules);
-        const data = await dataStore.getById(id);
+        const data = await dataStore.getById(memberId);
 
         if (!data) {
             throw new ErrorHandler(404);

@@ -47,12 +47,11 @@ export const create = async (req, res, next) => {
 
         const exists = await dataStore.getById(attendanceId);
 
-
         //validate
         // Time-in date should be < Time-out date
         // Required fields validation check
         const validationRules = {
-            //attendanceId: 'required',
+            // attendanceId: 'required', // new entries should not require an Id?
             timeIn: ['required', 'date'], //, 'before:timeOut'], //todo: this 
             timeOut: ['date'] //, 'after:timeIn']
         };

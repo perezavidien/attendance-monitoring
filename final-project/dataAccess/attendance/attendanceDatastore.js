@@ -49,7 +49,7 @@ export default class AttendanceDatastore {
 
     insertAttendance = async (attendance) => {
         const dbContext = await this.dbContext;
-        const attendanceId = uuid();
+        const attendanceId = attendance.attendanceId || uuid();
 
         dbContext
             .get(this.tableName)

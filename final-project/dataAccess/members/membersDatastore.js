@@ -57,7 +57,7 @@ export default class MemberDatastore {
 
     insertMember = async (member) => {
         const dbContext = await this.dbContext;
-        const memberId = uuid();
+        const memberId = member.memberId || uuid();
         dbContext
             .get(this.tableName)
             .push({ memberId, ...member })
