@@ -37,10 +37,6 @@ export default class AttendanceDatastore {
     getByEventId = async (eventId) => {
         const dbContext = await this.dbContext;
 
-        console.log(dbContext
-            .get(this.tableName).find(a => { a.eventId = eventId })
-            .value());
-
         return dbContext
             .get(this.tableName)
             .find({ 'eventId': eventId })

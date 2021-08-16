@@ -1,11 +1,12 @@
 import AttendanceDatastore from '../../dataAccess/attendance/attendanceDatastore.js';
 
-export const hasMemberAttendance = (id) => {
+export const hasMemberAttendance = async (id) => {
     const attendanceDataStore = new AttendanceDatastore();
-    const data = attendanceDataStore.getByEventId(id);
+    const data = await attendanceDataStore.getByEventId(id);
 
-    if (data || data.length > 0)
+    console.log(data);
+
+    if (data)
         return true;
-
     return false;
 }

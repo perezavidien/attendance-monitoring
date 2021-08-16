@@ -42,35 +42,31 @@ export const getById = async (req, res, next) => {
         const attendanceDataStore = new AttendanceDatastore();
         const attendanceData = await attendanceDataStore.getByEventId(id);
 
+        const memberAttendanceArr = [];
         if (attendanceData) {
             const memberDataStore = new MemberDatastore();
-            const memberAttendanceArr = [];
 
-            console.log('attendance data exists');
-            console.log(attendanceData);
+            // todo hindi array to
+            //attendanceData.forEach(_a => {
 
-            attendanceData.forEach(_a => {
+            const { timeIn, timeOut } = attendanceData;
+            const memberData = await memberDataStore.getByAttendanceId(attendanceData.attendanceId); //dapat array
 
-                console.log('inside foreach');
-                console.log(_a);
+            // todo hindi array to
+            //memberData.forEach(_m => {
 
-                const { timeIn, timeOut } = _a;
-                const memberData = memberDataStore.getByAttendanceId(_a.attendanceId); //dapat array
-
-                memberData.forEach(_m => {
-                    memberAttendanceArr.push({
-                        "memberId": _m.memberId,
-                        "name": _m.memberName,
-                        "timeIn": timeIn,
-                        "timeOut": timeOut
-                    });
+            if (memberData) {
+                memberAttendanceArr.push({
+                    "memberId": memberData.memberId,
+                    "name": memberData.memberName,
+                    "timeIn": timeIn,
+                    "timeOut": timeOut
                 });
-            });
-
-            eventData.memberAttendance = memberAttendanceArr;
-        } else {
-            eventData.memberAttendance = [];
+            }
+            //});
+            //});
         }
+        eventData.memberAttendance = memberAttendanceArr;
 
         //validate
         //Return Event object with array of MemberAttendance
@@ -80,11 +76,11 @@ export const getById = async (req, res, next) => {
         //     TimeIn
         //     TimeOut
 
-        if (!data) {
+        if (!eventData) {
             throw new ErrorHandler(404);
         }
 
-        res.send(data);
+        res.send(eventData);
 
         next()
     }
@@ -98,9 +94,16 @@ export const search = async (req, res, next) => {
     try {
         console.log('search');
         const dataStore = new EventDatastore();
-        const { name, datestart, dateend } = req.query;
+        const { eventname, datestart, dateend } = req.query;
 
-        const data = await dataStore.getByNameAndDates(name, datestart, dateend);
+        if (!eventname && !datestart && !dateend) {
+            throw new ErrorHandler(400);
+        }
+
+        //todo
+        //o	Date Format: yyyy_mm_dd 
+        const data = await dataStore.getByNameAndDates(eventname, datestart, dateend);
+
         //validate?
 
         // Search events by Event Name, DateTime Start, DateTime End
@@ -130,11 +133,11 @@ export const create = async (req, res, next) => {
 
         //validate
         const validationRules = {
-            eventId: 'required',
+            //eventId: 'required',
             eventName: 'required|string',
             eventType: 'required|string',
-            startDateTime: ['required', 'date', 'before:endTime'],
-            endDateTime: ['required', 'date', 'after:startTime']
+            startDateTime: ['required', 'date', 'before:endDateTime'],
+            endDateTime: ['required', 'date', 'after:startDateTime']
         };
         // Accept Event object
         // Event start date should be < event end date
@@ -213,13 +216,13 @@ export const deleteById = async (req, res, next) => {
         //validate
         if (!exists) {
             throw new ErrorHandler(404);
-        } else if (hasMemberAttendance(id)) {
+        } else if (await hasMemberAttendance(id)) {
             throw new ErrorHandler(400);
         }
 
         //todo test
         //Return a validation error if there is a member attendance
-
+        console.log('before delete');
         await dataStore.deleteEvent(id);
 
         res.sendStatus(200);

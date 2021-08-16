@@ -34,20 +34,24 @@ export default class EventDatastore {
             .value();
     }
 
-    getByNameAndDates = async (name, startDate, endDate) => {
+    getByNameAndDates = async (eventName, startDateTime, endDateTime) => {
         const dbContext = await this.dbContext;
 
         //todo
         // this search is case sensitive and the datets are treated as strings
         return dbContext
             .get(this.tableName)
-            .find({ 'eventName': name, 'startDateTime': startDate, 'endDateTime': endDate })
+            .find(e => {
+                return e.eventName.toLowerCase() === eventName.toLowerCase()
+                    && e.startDateTime === startDateTime
+                    && e.endDateTime === endDateTime
+            })
             .value();
     }
 
     insertEvent = async (event) => {
         const dbContext = await this.dbContext;
-        const eventId = uuid();
+        const eventId = event.eventId || uuid();
 
         dbContext
             .get(this.tableName)
