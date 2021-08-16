@@ -39,14 +39,23 @@ export const getById = async (req, res, next) => {
 
         if (attendanceData) {
             const memberDataStore = new MemberDatastore();
+            const memberAttendanceArr = [];
 
-            attendanceData.forEach(_ => {
-                const memberData = await memberDataStore.getByAttendanceId(_.id);
+            attendanceData.forEach(_a => {
+                const { timeIn, timeOut } = _a;
+                const memberData = await memberDataStore.getByAttendanceId(_a.attendanceId); //dapat array
 
-                if (memberData)
-                    _.push(memberData);
+                memberData.forEach(_m => {
+                    memberAttendanceArr.push({
+                        "memberId": _m.memberId,
+                        "name": _m.memberName,
+                        "timeIn": timeIn,
+                        "timeOut": timeOut
+                    });
+                });
             });
-            eventData.memberAttendance = attendanceData;
+
+            eventData.memberAttendance = memberAttendanceArr;
         } else {
             eventData.memberAttendance = [];
         }
@@ -95,17 +104,17 @@ export const create = async (req, res, next) => {
     try {
         console.log('create');
         const dataStore = new EventDatastore();
-        const { id } = req.body;
+        const { eventId } = req.body;
 
-        const exists = await dataStore.getById(id);
+        const exists = await dataStore.getById(eventId);
 
         //validate
         const validationRules = {
-            id: 'required',
-            name: 'required|string',
-            type: 'required|string',
-            startTime: ['required', 'date', 'before:endTime'],
-            endTime: ['required', 'date', 'after:startTime']
+            eventId: 'required',
+            eventName: 'required|string',
+            eventType: 'required|string',
+            startDateTime: ['required', 'date', 'before:endTime'],
+            endDateTime: ['required', 'date', 'after:startTime']
         };
         // Accept Event object
         // Event start date should be < event end date
@@ -136,17 +145,17 @@ export const update = async (req, res, next) => {
     try {
         console.log('update');
         const dataStore = new EventDatastore();
-        const { id } = req.body;
+        const { eventId } = req.body;
 
-        const exists = await dataStore.getById(id);
+        const exists = await dataStore.getById(eventId);
 
         //validate
         const validationRules = {
-            id: 'required',
-            name: 'required|string',
-            type: 'required|string',
-            startTime: ['required', 'date', 'before:endTime'],
-            endTime: ['required', 'date', 'after:startTime']
+            eventId: 'required',
+            eventName: 'required|string',
+            eventType: 'required|string',
+            startDateTime: ['required', 'date', 'before:endDateTime'],
+            endDateTime: ['required', 'date', 'after:startDateTime']
         };
         // Accept Event object
         // Event start date should be < event end date
@@ -184,10 +193,11 @@ export const deleteById = async (req, res, next) => {
         //validate
         if (!exists) {
             throw new ErrorHandler(404);
-        } else if (hasMemberAttendance(exists)) {
+        } else if (hasMemberAttendance(id)) {
             throw new ErrorHandler(400);
         }
-        //todo 
+
+        //todo test
         //Return a validation error if there is a member attendance
 
         await dataStore.deleteEvent(id);
@@ -221,14 +231,14 @@ export const exportById = async (req, res, next) => {
         if (attendanceData) {
             const memberDataStore = new MemberDatastore();
 
-            attendanceData.forEach(_ => {
-                const memberData = await memberDataStore.getByAttendanceId(_.id);
+            attendanceData.forEach(_a => {
+                const memberData = await memberDataStore.getByAttendanceId(_a.attendanceId);
 
-                const { timeIn, timeOut } = _;
+                const { timeIn, timeOut } = _a;
 
                 memberData.forEach(_m => {
                     membersList.push({
-                        "name": _m.name,
+                        "name": _m.memberName,
                         "timeIn": timeIn,
                         "timeOut": timeOut
                     });

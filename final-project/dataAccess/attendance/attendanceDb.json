@@ -1,14 +1,14 @@
 {
   "attendance": [
     {
-      "id": "74add63d-e0dc-425e-8086-c94880468c2d",
+      "attendanceId": "74add63d-e0dc-425e-8086-c94880468c2d",
       "timeIn": "",
       "timeOut": "",
       "eventId": "",
       "memberAttendance": []
     },
     {
-      "id": "73bc901b-93fc-498b-a582-0d023aab6f06",
+      "attendanceId": "73bc901b-93fc-498b-a582-0d023aab6f06",
       "timeIn": "",
       "timeOut": "",
       "eventId": "",

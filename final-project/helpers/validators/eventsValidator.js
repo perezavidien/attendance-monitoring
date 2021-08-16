@@ -1,3 +1,4 @@
+import AttendanceDatastore from '../../dataAccess/attendance/attendanceDatastore.js';
 import { ErrorHandler } from '../errorHandler.js'
 
 export const recordExists = (data) => {
@@ -12,8 +13,12 @@ export const displayResponse = (res, data) => {
     res.send(data);
 }
 
-export const hasMemberAttendance = (data) => {
-    if (data.memberAttendance && data.memberAttendance.length > 0)
+export const hasMemberAttendance = (id) => {
+    const attendanceDataStore = new AttendanceDatastore();
+    const data = await attendanceDataStore.getByEventId(id);
+
+    if (data || data.length > 0)
         return true;
+
     return false;
 }

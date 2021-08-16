@@ -25,12 +25,12 @@ export default class EventDatastore {
             .value();
     }
 
-    getById = async (id) => {
+    getById = async (eventId) => {
         const dbContext = await this.dbContext;
 
         return dbContext
             .get(this.tableName)
-            .find({ 'id': id })
+            .find({ 'eventId': eventId })
             .value();
     }
 
@@ -41,17 +41,17 @@ export default class EventDatastore {
         // this search is case sensitive and the datets are treated as strings
         return dbContext
             .get(this.tableName)
-            .find({ 'name': name, 'startDate': startDate, 'endDate': endDate })
+            .find({ 'eventName': name, 'startDateTime': startDate, 'endDateTime': endDate })
             .value();
     }
 
     insertEvent = async (event) => {
         const dbContext = await this.dbContext;
-        const id = uuid();
+        const eventId = uuid();
 
         dbContext
             .get(this.tableName)
-            .push({ id, ...event })
+            .push({ eventId, ...event })
             .write();
     }
 
@@ -60,15 +60,15 @@ export default class EventDatastore {
 
         dbContext
             .get(this.tableName)
-            .find({ 'id': event.id })
+            .find({ 'eventId': event.eventId })
             .assign(event).write();
     }
 
-    deleteEvent = async (id) => {
+    deleteEvent = async (eventId) => {
         const dbContext = await this.dbContext;
 
         dbContext
             .get(this.tableName)
-            .remove({ 'id': id }).write();
+            .remove({ 'eventId': eventId }).write();
     }
 }

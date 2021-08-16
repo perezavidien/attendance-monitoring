@@ -1,15 +1,15 @@
 {
   "members": [
     {
-      "id": "a71c8333-e51b-456c-aa89-7ac409002dfc",
-      "name": "first",
+      "memberId": "a71c8333-e51b-456c-aa89-7ac409002dfc",
+      "memberName": "first",
       "joinedDate": "",
       "status": "active",
       "attendanceId": "74add63d-e0dc-425e-8086-c94880468c2d"
     },
     {
-      "id": "19383280-92d0-4de0-a85a-183fbecf4ebf",
-      "name": "second",
+      "memberId": "19383280-92d0-4de0-a85a-183fbecf4ebf",
+      "memberName": "second",
       "joinedDate": "",
       "status": "inactive",
       "attendanceId": "74add63d-e0dc-425e-8086-c94880468c2d"
