@@ -2,16 +2,16 @@
   "attendance": [
     {
       "attendanceId": "74add63d-e0dc-425e-8086-c94880468c2d",
-      "timeIn": "",
-      "timeOut": "",
-      "eventId": "",
+      "timeIn": "2021-01-01",
+      "timeOut": "2021-01-01",
+      "eventId": "b6a6f6de-a07b-448d-94a1-70dd26a192e5",
       "memberAttendance": []
     },
     {
       "attendanceId": "73bc901b-93fc-498b-a582-0d023aab6f06",
-      "timeIn": "",
-      "timeOut": "",
-      "eventId": "",
+      "timeIn": "2021-02-01",
+      "timeOut": "2021-02-01",
+      "eventId": "b6a6f6de-a07b-448d-94a1-70dd26a192e5",
       "memberAttendance": []
     }
   ]

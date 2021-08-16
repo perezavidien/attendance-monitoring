@@ -4,15 +4,15 @@
       "eventId": "fdda538a-e952-4d0c-93d4-5bf9d7542a95",
       "eventName": "Team building",
       "eventType": "type1",
-      "startDateTime": "",
-      "endDateTime": ""
+      "startDateTime": "2021-01-01",
+      "endDateTime": "2021-02-01"
     },
     {
       "eventId": "b6a6f6de-a07b-448d-94a1-70dd26a192e5",
       "eventName": "First",
       "eventType": "monthly",
       "startDateTime": "2021-01-01",
-      "endDateTime": "2021-01-10"
+      "endDateTime": "2021-12-01"
     }
   ]
 }

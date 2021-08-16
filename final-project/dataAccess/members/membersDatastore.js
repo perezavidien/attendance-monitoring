@@ -24,11 +24,11 @@ export default class MemberDatastore {
             .value();
     }
 
-    getById = async (id) => {
+    getById = async (memberId) => {
         const dbContext = await this.dbContext;
         return dbContext
             .get(this.tableName)
-            .find({ 'id': id })
+            .find({ 'memberId': memberId })
             .value();
     }
 
@@ -47,16 +47,16 @@ export default class MemberDatastore {
         // this search is case sensitive and the datets are treated as strings
         return dbContext
             .get(this.tableName)
-            .find({ 'name': name, 'status': status })
+            .find({ 'memberName': name, 'status': status })
             .value();
     }
 
     insertMember = async (member) => {
         const dbContext = await this.dbContext;
-        const id = uuid();
+        const memberId = uuid();
         dbContext
             .get(this.tableName)
-            .push({ id, ...member })
+            .push({ memberId, ...member })
             .write();
     }
 
@@ -64,14 +64,14 @@ export default class MemberDatastore {
         const dbContext = await this.dbContext;
         dbContext
             .get(this.tableName)
-            .find({ 'id': member.id })
+            .find({ 'memberId': member.memberId })
             .assign(member).write();
     }
 
-    deleteMember = async (id) => {
+    deleteMember = async (memberId) => {
         const dbContext = await this.dbContext;
         dbContext
             .get(this.tableName)
-            .remove({ 'id': id }).write();
+            .remove({ 'memberId': memberId }).write();
     }
 }

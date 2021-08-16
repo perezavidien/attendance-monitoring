@@ -24,9 +24,14 @@ export const getById = async (req, res, next) => {
         const dataStore = new AttendanceDatastore()
         const { id } = req.params;
 
+        console.log(id);
         const data = await dataStore.getById(id);
 
-        displayResponse(res, data);
+        if (!data) {
+            throw new ErrorHandler(404)
+        }
+
+        res.send(data);
 
         next()
     }
@@ -48,7 +53,7 @@ export const create = async (req, res, next) => {
         // Time-in date should be < Time-out date
         // Required fields validation check
         const validationRules = {
-            attendanceId: 'required',
+            //attendanceId: 'required',
             timeIn: ['required', 'date'], //, 'before:timeOut'], //todo: this 
             timeOut: ['date'] //, 'after:timeIn']
         };
@@ -89,7 +94,6 @@ export const update = async (req, res, next) => {
 
         const exists = await dataStore.getById(attendanceId);
 
-
         //validate
         // Time-in date should be < Time-out date
         // Required fields validation check
@@ -114,6 +118,7 @@ export const update = async (req, res, next) => {
             throw new ErrorHandler(400);
         }
 
+        console.log(req.body);
         await dataStore
             .updateAttendance(req.body);
 

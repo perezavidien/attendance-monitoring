@@ -31,8 +31,13 @@ export const getById = async (req, res, next) => {
             return exportById(req, res, next);
         }
 
+
         const eventDataStore = new EventDatastore();
         const eventData = await eventDataStore.getById(id);
+
+        if (!eventData) {
+            throw new ErrorHandler(404);
+        }
 
         const attendanceDataStore = new AttendanceDatastore();
         const attendanceData = await attendanceDataStore.getByEventId(id);
@@ -41,7 +46,14 @@ export const getById = async (req, res, next) => {
             const memberDataStore = new MemberDatastore();
             const memberAttendanceArr = [];
 
+            console.log('attendance data exists');
+            console.log(attendanceData);
+
             attendanceData.forEach(_a => {
+
+                console.log('inside foreach');
+                console.log(_a);
+
                 const { timeIn, timeOut } = _a;
                 const memberData = memberDataStore.getByAttendanceId(_a.attendanceId); //dapat array
 

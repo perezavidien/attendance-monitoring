@@ -30,12 +30,17 @@ export default class AttendanceDatastore {
 
         return dbContext
             .get(this.tableName)
-            .find({ 'id': id })
+            .find({ 'attendanceId': id })
             .value();
     }
 
     getByEventId = async (eventId) => {
         const dbContext = await this.dbContext;
+
+        console.log(dbContext
+            .get(this.tableName).find(a => { a.eventId = eventId })
+            .value());
+
         return dbContext
             .get(this.tableName)
             .find({ 'eventId': eventId })
@@ -44,28 +49,30 @@ export default class AttendanceDatastore {
 
     insertAttendance = async (attendance) => {
         const dbContext = await this.dbContext;
-        const id = uuid();
+        const attendanceId = uuid();
 
         dbContext
             .get(this.tableName)
-            .push({ id, ...attendance })
+            .push({ attendanceId, ...attendance })
             .write();
     }
 
     updateAttendance = async (attendance) => {
         const dbContext = await this.dbContext;
+        
+        console.log(attendance);
 
         dbContext
             .get(this.tableName)
-            .find({ 'id': attendance.id })
+            .find({ 'attendanceId': attendance.attendanceId })
             .assign(attendance).write();
     }
 
-    deleteAttendance = async (id) => {
+    deleteAttendance = async (attendanceId) => {
         const dbContext = await this.dbContext;
 
         dbContext
             .get(this.tableName)
-            .remove({ 'id': id }).write();
+            .remove({ 'attendanceId': attendanceId }).write();
     }
 }
