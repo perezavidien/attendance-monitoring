@@ -1,7 +1,6 @@
 import AttendanceDatastore from '../dataAccess/attendance/attendanceDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
-import { recordExists, displayResponse } from '../helpers/validators/attendanceValidator.js'
 
 export const getAll = async (req, res, next) => {
     try {

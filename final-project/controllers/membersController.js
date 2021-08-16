@@ -1,7 +1,7 @@
 import MemberDatastore from '../dataAccess/members/membersDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
-import { displayResponse, hasEventAttendance, recordExists } from '../helpers/validators/membersValidator.js'
+import { hasEventAttendance } from '../helpers/validators/membersValidator.js'
 
 export const getAll = async (req, res, next) => {
     try {
@@ -24,21 +24,24 @@ export const getById = async (req, res, next) => {
         const { id } = req.params;
 
         if (id === 'search') {
-            search(req, res, next);
-        } else {
-            const dataStore = new MemberDatastore()
-            const data = await dataStore.getById(id);
-
-            // Return Member object with array of EventAttendance
-            //    EventAttendance
-            //      EventName
-            //      TimeIn
-            //      TimeOut
-
-            displayResponse(res, data);
-
-            next()
+            return search(req, res, next);
         }
+        const dataStore = new MemberDatastore()
+        const data = await dataStore.getById(id);
+
+        // Return Member object with array of EventAttendance
+        //    EventAttendance
+        //      EventName
+        //      TimeIn
+        //      TimeOut
+
+        if (!data) {
+            throw new ErrorHandler(404);
+        }
+
+        res.send(data);
+
+        next()
     }
     catch (err) {
         next(err)
@@ -56,12 +59,16 @@ export const search = async (req, res, next) => {
 
         const data = await dataStore.getByNameAndStatus(name, status);
 
-        //validate
+        //todo
         // Status are enumerations of
         // 	Active
         // 	In-active
 
-        displayResponse(res, data);
+        if (!data) {
+            throw new ErrorHandler(404)
+        }
+
+        res.send(data);
 
         next()
     }

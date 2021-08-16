@@ -1,7 +1,7 @@
 import EventDatastore from '../dataAccess/events/eventsDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
-import { recordExists, hasMemberAttendance, displayResponse } from '../helpers/validators/eventsValidator.js'
+import { hasMemberAttendance } from '../helpers/validators/eventsValidator.js'
 import { downloadCsv } from '../helpers/downloadCsv.js';
 import AttendanceDatastore from '../dataAccess/attendance/attendanceDatastore.js';
 import MemberDatastore from '../dataAccess/members/membersDatastore.js';
@@ -80,7 +80,11 @@ export const getById = async (req, res, next) => {
         //     TimeIn
         //     TimeOut
 
-        displayResponse(res, eventData);
+        if (!data) {
+            throw new ErrorHandler(404);
+        }
+
+        res.send(data);
 
         next()
     }
@@ -103,7 +107,11 @@ export const search = async (req, res, next) => {
         // Date Format: yyyy_mm_dd 
         // Will return an error if no search criteria provided
 
-        displayResponse(res, data);
+        if (!data) {
+            throw new ErrorHandler(404);
+        }
+
+        res.send(data);
 
         next()
     }

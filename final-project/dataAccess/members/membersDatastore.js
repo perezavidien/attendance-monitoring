@@ -44,10 +44,14 @@ export default class MemberDatastore {
         const dbContext = await this.dbContext;
 
         //todo
-        // this search is case sensitive and the datets are treated as strings
+        // this search is comparing the whole word
+        // might need to use .contains() as an enhancement
         return dbContext
             .get(this.tableName)
-            .find({ 'memberName': name, 'status': status })
+            .find(m => {
+                return m.memberName.toLowerCase() === name.toLowerCase()
+                    && m.status.toLowerCase() === status.toLowerCase()
+            })
             .value();
     }
 
