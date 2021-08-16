@@ -43,7 +43,7 @@ export const getById = async (req, res, next) => {
 
             attendanceData.forEach(_a => {
                 const { timeIn, timeOut } = _a;
-                const memberData = await memberDataStore.getByAttendanceId(_a.attendanceId); //dapat array
+                const memberData = memberDataStore.getByAttendanceId(_a.attendanceId); //dapat array
 
                 memberData.forEach(_m => {
                     memberAttendanceArr.push({
@@ -232,7 +232,7 @@ export const exportById = async (req, res, next) => {
             const memberDataStore = new MemberDatastore();
 
             attendanceData.forEach(_a => {
-                const memberData = await memberDataStore.getByAttendanceId(_a.attendanceId);
+                const memberData = memberDataStore.getByAttendanceId(_a.attendanceId);
 
                 const { timeIn, timeOut } = _a;
 

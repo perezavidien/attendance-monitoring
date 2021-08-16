@@ -15,7 +15,7 @@ export const displayResponse = (res, data) => {
 
 export const hasMemberAttendance = (id) => {
     const attendanceDataStore = new AttendanceDatastore();
-    const data = await attendanceDataStore.getByEventId(id);
+    const data = attendanceDataStore.getByEventId(id);
 
     if (data || data.length > 0)
         return true;
