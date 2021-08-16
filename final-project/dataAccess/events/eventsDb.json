@@ -5,16 +5,14 @@
       "name": "Team building",
       "type": "",
       "startDate": "",
-      "endDate": "",
-      "memberAttendance": []
+      "endDate": ""
     },
     {
       "id": "b6a6f6de-a07b-448d-94a1-70dd26a192e5",
       "name": "First",
       "type": "yearly",
       "startDate": "2021-01-01",
-      "endDate": "2021-01-10",
-      "memberAttendance": []
+      "endDate": "2021-01-10"
     }
   ]
 }

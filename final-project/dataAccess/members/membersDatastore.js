@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 const moduleURL = path.dirname(fileURLToPath(import.meta.url));
 const dbAsync = lowdb(new FileAsync(path.join(moduleURL, 'membersDb.json')));
 
-export default class Datastore {
+export default class MemberDatastore {
     constructor() {
         this.tableName = 'members';
         this.dbContext = dbAsync.then(db => {
@@ -29,6 +29,14 @@ export default class Datastore {
         return dbContext
             .get(this.tableName)
             .find({ 'id': id })
+            .value();
+    }
+
+    getByAttendanceId = async (attendanceId) => {
+        const dbContext = await this.dbContext;
+        return dbContext
+            .get(this.tableName)
+            .find({ 'attendanceId': attendanceId })
             .value();
     }
 

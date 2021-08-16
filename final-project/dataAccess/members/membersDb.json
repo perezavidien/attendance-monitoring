@@ -5,21 +5,14 @@
       "name": "first",
       "joinedDate": "",
       "status": "active",
-      "eventAttendance": []
+      "attendanceId": "74add63d-e0dc-425e-8086-c94880468c2d"
     },
     {
       "id": "19383280-92d0-4de0-a85a-183fbecf4ebf",
       "name": "second",
       "joinedDate": "",
       "status": "inactive",
-      "eventAttendance": [
-        {
-          "something": 123
-        },
-        {
-          "something": 233
-        }
-      ]
+      "attendanceId": "74add63d-e0dc-425e-8086-c94880468c2d"
     }
   ]
 }

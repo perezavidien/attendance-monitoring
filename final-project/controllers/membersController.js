@@ -1,4 +1,4 @@
-import Datastore from '../dataAccess/members/membersDatastore.js';
+import MemberDatastore from '../dataAccess/members/membersDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
 import { displayResponse, hasEventAttendance, recordExists } from '../helpers/validators/membersValidator.js'
@@ -6,7 +6,7 @@ import { displayResponse, hasEventAttendance, recordExists } from '../helpers/va
 export const getAll = async (req, res, next) => {
     try {
         console.log('getAll');
-        const dataStore = new Datastore()
+        const dataStore = new MemberDatastore()
         const data = await dataStore.getAll();
 
         res.send(data);
@@ -26,7 +26,7 @@ export const getById = async (req, res, next) => {
         if (id === 'search') {
             search(req, res, next);
         } else {
-            const dataStore = new Datastore()
+            const dataStore = new MemberDatastore()
             const data = await dataStore.getById(id);
 
             // Return Member object with array of EventAttendance
@@ -49,7 +49,7 @@ export const getById = async (req, res, next) => {
 export const search = async (req, res, next) => {
     try {
         console.log('search');
-        const dataStore = new Datastore();
+        const dataStore = new MemberDatastore();
 
         const name = req.query?.name;
         const status = req.query?.status;
@@ -73,7 +73,7 @@ export const search = async (req, res, next) => {
 export const create = async (req, res, next) => {
     try {
         console.log('create');
-        const dataStore = new Datastore();
+        const dataStore = new MemberDatastore();
         const { id } = req.body;
 
         //validate
@@ -114,7 +114,7 @@ export const create = async (req, res, next) => {
 export const update = async (req, res, next) => {
     try {
         console.log('update');
-        const dataStore = new Datastore();
+        const dataStore = new MemberDatastore();
         const { id } = req.body;
 
         //validate
@@ -152,7 +152,7 @@ export const update = async (req, res, next) => {
 export const deleteById = async (req, res, next) => {
     try {
         console.log('delete');
-        const dataStore = new Datastore();
+        const dataStore = new MemberDatastore();
         const { id } = req.params;
 
         const data = await dataStore.getById(id);

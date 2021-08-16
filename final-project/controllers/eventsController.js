@@ -1,12 +1,14 @@
-import Datastore from '../dataAccess/events/eventsDatastore.js';
+import EventDatastore from '../dataAccess/events/eventsDatastore.js';
 import Validator from 'validatorjs';
 import { ErrorHandler } from '../helpers/errorHandler.js'
 import { recordExists, hasMemberAttendance, displayResponse } from '../helpers/validators/eventsValidator.js'
 import { downloadCsv } from '../helpers/downloadCsv.js';
+import AttendanceDatastore from '../dataAccess/attendance/attendanceDatastore.js';
+import MemberDatastore from '../dataAccess/members/membersDatastore.js';
 
 export const getAll = async (req, res, next) => {
     try {
-        const dataStore = new Datastore()
+        const dataStore = new EventDatastore()
         const data = await dataStore.getAll();
 
         res.send(data);
@@ -24,25 +26,42 @@ export const getById = async (req, res, next) => {
         const { id } = req.params;
 
         if (id === "search") {
-            search(req, res, next);
+            return search(req, res, next);
         } else if (id === "export") {
-            exportById(req, res, next);
-        } else {
-            const dataStore = new Datastore()
-            const data = await dataStore.getById(id);
-
-            //validate
-            //Return Event object with array of MemberAttendance
-            //  MemberAttendance:
-            //     MemberId (GUID)
-            //     Name
-            //     TimeIn
-            //     TimeOut
-
-            displayResponse(res, data);
-
-            next()
+            return exportById(req, res, next);
         }
+
+        const eventDataStore = new EventDatastore();
+        const eventData = await eventDataStore.getById(id);
+
+        const attendanceDataStore = new AttendanceDatastore();
+        const attendanceData = await attendanceDataStore.getByEventId(id);
+
+        if (attendanceData) {
+            const memberDataStore = new MemberDatastore();
+
+            attendanceData.forEach(_ => {
+                const memberData = await memberDataStore.getByAttendanceId(_.id);
+
+                if (memberData)
+                    _.push(memberData);
+            });
+            eventData.memberAttendance = attendanceData;
+        } else {
+            eventData.memberAttendance = [];
+        }
+
+        //validate
+        //Return Event object with array of MemberAttendance
+        //  MemberAttendance:
+        //     MemberId (GUID)
+        //     Name
+        //     TimeIn
+        //     TimeOut
+
+        displayResponse(res, eventData);
+
+        next()
     }
     catch (err) {
         next(err)
@@ -53,7 +72,7 @@ export const getById = async (req, res, next) => {
 export const search = async (req, res, next) => {
     try {
         console.log('search');
-        const dataStore = new Datastore();
+        const dataStore = new EventDatastore();
         const { name, datestart, dateend } = req.query;
 
         const data = await dataStore.getByNameAndDates(name, datestart, dateend);
@@ -75,7 +94,7 @@ export const search = async (req, res, next) => {
 export const create = async (req, res, next) => {
     try {
         console.log('create');
-        const dataStore = new Datastore();
+        const dataStore = new EventDatastore();
         const { id } = req.body;
 
         const exists = await dataStore.getById(id);
@@ -116,7 +135,7 @@ export const create = async (req, res, next) => {
 export const update = async (req, res, next) => {
     try {
         console.log('update');
-        const dataStore = new Datastore();
+        const dataStore = new EventDatastore();
         const { id } = req.body;
 
         const exists = await dataStore.getById(id);
@@ -157,7 +176,7 @@ export const update = async (req, res, next) => {
 export const deleteById = async (req, res, next) => {
     try {
         console.log('deletebyid');
-        const dataStore = new Datastore();
+        const dataStore = new EventDatastore();
         const { id } = req.params;
 
         const exists = await dataStore.getById(id);
@@ -187,49 +206,56 @@ export const exportById = async (req, res, next) => {
     try {
         console.log('exportbyid');
         const eventId = req._parsedUrl.query;
-        const dataStore = new Datastore();
-        const data = await dataStore.getById(eventId);
+        const eventDataStore = new EventDatastore();
+        const eventData = await eventDataStore.getById(eventId);
 
         // validate
-        if (!data)
+        if (!eventData)
             throw new ErrorHandler(404);
 
-        //todo
-        // displayResponse(res, data);
-        // return excel file
-        //Filename: [EventName]_[EventStartDateTime].xlsx
-        //Columns:
-        // •	Member Name
-        // •	Time-In
-        // •	Time-Out
-        // Sort results by Time-In, Asc
-        const mapping = [
-            {
-                label: 'Event Id',
-                value: 'id'
-            }, {
-                label: 'Event Name',
-                value: 'name'
-            }, {
-                label: 'Event Type',
-                value: 'type'
-            }, {
-                label: 'Start Date',
-                value: 'startDate'
-            }, {
-                label: 'End Date',
-                value: 'endDate'
-            }, {
-                label: 'Member Attendance',
-                value: 'memberAttendance'
-            }
-        ];
+        const attendanceDataStore = new AttendanceDatastore();
+        const attendanceData = await attendanceDataStore.getByEventId(eventId);
 
-        console.log(mapping);
-        const fileName = data.name + '_' + data.startTime + '.csv';
-        downloadCsv(res, fileName, mapping, data);
+        let membersList;
 
-        next()
+        if (attendanceData) {
+            const memberDataStore = new MemberDatastore();
+
+            attendanceData.forEach(_ => {
+                const memberData = await memberDataStore.getByAttendanceId(_.id);
+
+                const { timeIn, timeOut } = _;
+
+                memberData.forEach(_m => {
+                    membersList.push({
+                        "name": _m.name,
+                        "timeIn": timeIn,
+                        "timeOut": timeOut
+                    });
+                });
+            });
+
+            //todo test 
+            const mapping = [
+                {
+                    label: 'Member Name',
+                    value: 'name'
+                }, {
+                    label: 'Time In',
+                    value: 'timeIn'
+                }, {
+                    label: 'Time Out',
+                    value: 'timeOut'
+                }
+            ];
+
+            console.log(mapping);
+            const fileName = eventData.name + '_' + eventData.startTime + '.xlsx';
+            // Sort results by Time-In, Asc
+            downloadCsv(res, fileName, mapping, membersList);
+
+            next()
+        }
     }
     catch (err) {
         next(err)
